@@ -31,3 +31,50 @@ make build
 # 3 Run it (starts JupyterLab by default)
 make run
 ```
+
+Then open the link printed in your terminal — typically something like:
+`http://127.0.0.1:8888/lab`
+
+Project Structure
+DevDock/
+├── Dockerfile        # Defines your environment
+├── Makefile          # Shortcuts for building/running
+└── requirements.txt  # Python dependencies (customize this)
+
+**Customize It**
+
+Add or remove packages in requirements.txt
+
+Extend the Dockerfile to include your favorite tools (e.g. git, curl, node)
+
+Swap out Jupyter for your framework of choice
+
+Integrate with VS Code Dev Containers:
+
+Install the Dev Containers extension
+
+Use “Attach to Running Container” from the Command Palette
+
+**Why “DevDock”?**
+
+Because this is where your projects dock safely.
+Each container is its own island — clean, consistent, and reproducible.
+Turn it on, do your work, turn it off — no mess left behind.
+
+**Requirements**
+
+Docker Desktop
+
+VS Code
+
+(Optional) VS Code Dev Containers extension
+
+**Next Steps**
+
+Experiment: modify the Dockerfile to suit your workflow
+
+Share: fork this repo and make your own “Dock” template
+
+Learn: explore multi-container setups with docker-compose
+
+DevDock is meant to be a learning bridge — from “I use containers” → to “I build and share my own environments.”
