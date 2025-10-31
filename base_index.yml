@@ -1,0 +1,9 @@
+bases:
+  python-base:
+    version: 1.0
+    from: python:3.13-slim
+    includes: [pip, git, build-essential]
+  ds-base:
+    version: 1.1
+    from: devdock/python-base
+    includes: [numpy, pandas, scikit-learn, jupyterlab, matplotlib, seaborn]

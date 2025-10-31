@@ -1,85 +1,129 @@
-# DevDock
+# DevDock — The Base Image Hub
 
-**DevDock** is a lightweight, open-source template for building your own *super containerized* development environments — complete with Docker, Make, and Jupyter/VS Code integration.
+**DevDock** is an open-source repository showcasing how to design, build, and version **reusable Docker base layers** for Python and data science projects.  
 
-The goal:  
-To help you (and others) learn how to **build, run, and customize fully reproducible coding environments** — no Conda chaos, no dependency headaches, no "it works on my machine."
+Instead of just a “how-to run containers,” DevDock is a **living library of base images**, designed for:
+- **Reproducibility**: exact environments anyone can pull and run  
+- **Efficiency**: share common layers to save disk space  
+- **Transparency**: see how each base layer is built and optimized  
 
----
-
-## What You’ll Learn
-
-By exploring DevDock, you’ll learn how to:
-- Build a reproducible environment from a `Dockerfile`
-- Use a `Makefile` to simplify Docker commands (`make build`, `make run`, etc.)
-- Mount your local code into a running container
-- Run JupyterLab or attach VS Code directly to a containerized workspace
-- Extend the setup for your own projects or teams
+All images are available on **[Docker Hub](https://hub.docker.com)** with semantic versioning, so you can pull exactly the environment you need.
 
 ---
 
-## Quickstart
+## Repo Structure
+```
+DevDock/
+├── base/
+│ ├── python-base/ # Minimal Python environment
+│ └── ds-base/ # Python + core data science packages (numpy, pandas, scikit-learn, jupyterlab)
+│
+├── templates/
+│ └── project-template/ # Starter Dockerfile & Makefile for new projects
+│
+├── docs/
+│ └── layer-diagrams/ # Visualizations of layer hierarchies
+│
+└── README.md # This file
+```
+
+
+- `base/` → foundational images you can build on  
+- `templates/` → ready-to-use scaffolds for new projects  
+- `docs/` → explanatory diagrams showing how layers stack and depend on each other  
+
+---
+
+## Base Images
+
+| Image | Description | Docker Hub |
+|-------|------------|------------|
+| `python-base` | Minimal Python 3.11 environment with essential system tools | `yourusername/python-base:latest` |
+| `ds-base`     | Extends `python-base` with NumPy, Pandas, scikit-learn, JupyterLab, Matplotlib, Seaborn | `yourusername/ds-base:latest` |
+
+**Versioning Notes:**  
+- Each image is tagged with a semantic version (e.g., `1.0`, `1.1`)  
+- `latest` always points to the most stable recent release  
+- Old versions remain available for reproducibility  
+
+---
+
+## Building Locally
+
+You can build any base image locally before pushing or extending:
 
 ```bash
-# 1 Clone this repo
-git clone https://github.com/brandonminer/devdock.git
-cd devdock
-
-# 2 Build your container image
+# Build python-base
+cd base/python-base
 make build
 
-# 3 Run it (starts JupyterLab by default)
+# Build ds-base (depends on python-base)
+cd ../ds-base
+make build
+```
+
+This will create local Docker images that you can use as bases for your projects.
+
+## Using DevDock Bases in Your Projects
+
+Example Dockerfile for a project extending ds-base:
+```bash
+FROM yourusername/ds-base:latest
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+WORKDIR /workspace
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--allow-root"]
+```
+
+Then build and run:
+```bash
+make build
 make run
 ```
 
-Then open the link printed in your terminal — typically something like:
-`http://127.0.0.1:8888/lab`
+All project-specific dependencies add just one layer on top of the shared base, saving space and build time.
 
-Project Structure
+## Philosophy: Layered, Transparent, Efficient
+
+DevDock encourages:
+
+Layer reuse: common dependencies exist in base images, reducing duplication
+
+Traceable builds: each Dockerfile shows exactly what’s installed and why
+
+Version control for environments: semantic tags ensure reproducibility
+
+Educational transparency: you can see how base layers are constructed and extend them yourself
+
+Think of DevDock as a meta-environment repository: each base image is a building block, and projects are constructed on top.
+
+## Contributing
+
+Propose new base layers (ML-base, NLP-base, etc.)
+
+Add documentation or diagrams explaining layer structure
+
+Suggest optimizations for smaller, faster builds
+
+Note: All contributions should maintain reproducibility and clarity in layering.
+
+## Get Started
+
+Clone DevDock:
+```bash
+git clone https://github.com/yourusername/devdock.git
+cd devdock
 ```
-DevDock/
-├── Dockerfile        # Defines your environment
-├── Makefile          # Shortcuts for building/running
-└── requirements.txt  # Python dependencies (customize this)
+
+Build a base image (optional, local testing):
+```bash
+cd base/python-base
+make build
 ```
 
-**Customize It**
+Use the base images in your own projects or extend them via Docker Hub:
+```
+FROM yourusername/ds-base:latest
+```
 
-Add or remove packages in requirements.txt
-
-Extend the Dockerfile to include your favorite tools (e.g. git, curl, node)
-
-Swap out Jupyter for your framework of choice
-
-Integrate with VS Code Dev Containers:
-
-Install the Dev Containers extension
-
-Use “Attach to Running Container” from the Command Palette
-
-**Why “DevDock”?**
-
-Because this is where your projects dock safely.
-Each container is its own island — clean, consistent, and reproducible.
-Turn it on, do your work, turn it off — no mess left behind.
-
-I love conda for its isolation, but it is so heavy on disk, especially if you have close to 10 or more environments.
-
-
-**Requirements**
-
-Docker Desktop
-
-VS Code
-
-(Optional) VS Code Dev Containers extension
-
-**Next Steps**
-
-Experiment: modify the Dockerfile to suit your workflow
-
-Share: fork this repo and make your own “Dock” template
-
-Learn: explore multi-container setups with docker-compose
-
-DevDock is meant to be a learning bridge — from “I use containers” → to “I build and share my own environments.”
+DevDock is more than a “how-to”: it’s a teaching tool, a repository of best practices, and a hub for reproducible, containerized Python environments.
