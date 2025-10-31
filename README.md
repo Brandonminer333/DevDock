@@ -36,10 +36,12 @@ Then open the link printed in your terminal — typically something like:
 `http://127.0.0.1:8888/lab`
 
 Project Structure
+```
 DevDock/
 ├── Dockerfile        # Defines your environment
 ├── Makefile          # Shortcuts for building/running
 └── requirements.txt  # Python dependencies (customize this)
+```
 
 **Customize It**
 
@@ -60,6 +62,9 @@ Use “Attach to Running Container” from the Command Palette
 Because this is where your projects dock safely.
 Each container is its own island — clean, consistent, and reproducible.
 Turn it on, do your work, turn it off — no mess left behind.
+
+I love conda for its isolation, but it is so heavy on disk, especially if you have close to 10 or more environments.
+
 
 **Requirements**
 
